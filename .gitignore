@@ -1,0 +1,33 @@
+# Generated files
+**/obj/
+**/bin/
+**/.env
+
+# IDE
+**/.idea/
+**/.vscode/
+Mango.GatewaySolution/bin
+Mango.GatewaySolution/obj
+Mango.Web/bin
+Mango.Web/obj
+Mango.MessageBus/bin
+Mango.MessageBus/obj
+PaymentProcessor/bin
+PaymentProcessor/obj
+Mango.Services.PaymentAPI/bin
+Mango.Services.PaymentAPI/obj
+Mango.Services.AzureBlobService/bin
+Mango.Services.AzureBlobService/obj
+Mango.Services.CouponAPI/bin
+Mango.Services.CouponAPI/obj
+Mango.Services.Email/bin
+Mango.Services.Email/obj
+Mango.Services.Identity/bin
+Mango.Services.Identity/obj
+Mango.Services.OrderAPI/bin
+Mango.Services.OrderAPI/obj
+Mango.Services.ProductAPI/bin
+Mango.Services.ProductAPI/obj
+Mango.Services.ShoppingCartAPI/bin
+Mango.Services.ShoppingCartAPI/obj
+

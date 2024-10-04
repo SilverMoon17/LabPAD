@@ -1,0 +1,118 @@
+x-app-default-env: &app-default-env
+  Logging__LogLevel__Default: Information
+  Logging__LogLevel__Microsoft.AspNetCore: Warning
+  AllowedHosts: "*"
+
+services:
+  app:
+    restart: unless-stopped
+    image: mango.web
+    build:
+      context: ./Mango.Web
+    volumes:
+      - ./Mango.Web/wwwroot:/app/wwwroot
+    environment:
+      <<: *app-default-env
+      ServiceUrls__IdentityAPI: https://app.service.identity
+      ServiceUrls__ProductAPI: http://app.service.product
+      ServiceUrls__CouponAPI: http://app.service.coupon
+      ServiceUrls__ShoppingCartAPI: http://app.service.shoppingcart
+      ServiceUrls__AzureBlobAPI:
+      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Username=postgres;Password=postgres;Database=MangoWEBAPI"
+
+  app.service.order:
+    restart: unless-stopped
+    image: mango.services.order
+    build:
+      context: .
+      dockerfile: ./Mango.Services.OrderAPI/Dockerfile
+    environment:
+      <<: *app-default-env
+      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Username=postgres;Password=postgres;Database=MangoOrderAPI"
+      ConnectionStrings__AzureServiceBus: ${AZURE_SERVICE_BUS_CONNECTION_STRING}
+      CheckoutMessageTopic: "checkoutmessagetopic"
+      CheckoutSubscription: "mangoOrdersSubscription"
+      OrderPaymentProcessTopic: "orderpaymentprocesstopic"
+      OrderPaymentProcessSubscription: "mangoPayment"
+      OrderUpdatePaymentResultTopic: "orderupdatepaymentresulttopic"
+      OrderUpdatePaymentResultSubscription": "mangoOrdersSubscription"
+      CheckoutMessageQueue: "checkoutqueue"
+    
+      
+  app.service.azureblobservice:
+    restart: unless-stopped
+    image: mango.services.azureblobservice
+    build: Mango.Services.AzureBlobService
+    environment:
+      <<: *app-default-env
+      ServiceUrls__IdentityServer: http://app.service.identity
+      ConnectionStrings__BlobStorage: ${CONNECTION_STRINGS_BLOB_STORAGE}
+      BlobContainerName: ${BLOB_CONTAINER_NAME}
+      
+  app.service.product:
+    restart: unless-stopped
+    image: mango.services.productapi
+    build: Mango.Services.ProductAPI
+    environment:
+      <<: *app-default-env
+      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Username=postgres;Password=postgres;Database=MangoProductAPI"
+
+  app.service.payment:
+    restart: unless-stopped
+    image: mango.services.payment
+    build:
+      context: .
+      dockerfile: ./Mango.Services.PaymentAPI/Dockerfile
+    environment:
+      <<: *app-default-env
+      ServiceUrls__IdentityServer: http://app.service.identity
+      ConnectionStrings__AzureServiceBus: ${AZURE_SERVICE_BUS_CONNECTION_STRING}
+      OrderPaymentProcessTopic: "orderpaymentprocesstopic"
+      OrderPaymentProcessSubscription: "mangoPayment"
+      OrderUpdatePaymentResultTopic: "orderupdatepaymentresulttopic"
+      OrderUpdatePaymentResultSubscription: "mangoOrdersSubscription"
+      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Username=postgres;Password=postgres;Database=MangoPaymentAPI"
+
+  app.service.shoppingcart:
+    restart: unless-stopped
+    image: mango.services.shoppingcart
+    build:
+      context: .
+      dockerfile: ./Mango.Services.ShoppingCartAPI/Dockerfile
+    environment:
+      <<: *app-default-env
+      ServiceUrls__IdentityServer: http://app.service.identity
+      ServiceUrls__CouponAPI: http://app.service.coupon
+      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Username=postgres;Password=postgres;Database=MangoShoppingCartAPI"
+
+  app.service.identity:
+    restart: unless-stopped
+    image: mango.services.identity
+    build: Mango.Services.Identity
+    volumes:
+      - ./Mango.Services.Identity/wwwroot:/app/wwwroot
+    environment:
+      <<: *app-default-env
+      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Username=postgres;Password=postgres;Database=MangoIdentityAPI"
+
+  app.service.email:
+    restart: unless-stopped
+    image: mango.services.email
+    build:
+      context: .
+      dockerfile: ./Mango.Services.Email/Dockerfile
+    environment:
+      <<: *app-default-env
+      ConnectionStrings__AzureServiceBus: ${AZURE_SERVICE_BUS_CONNECTION_STRING}
+      OrderUpdatePaymentResultTopic: "orderupdatepaymentresulttopic"
+      EmailSubscription: "emailSubscription"
+      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Username=postgres;Password=postgres;Database=MangoEmailAPI"
+
+  app.service.coupon:
+    restart: unless-stopped
+    image: mango.services.coupon
+    build: Mango.Services.CouponAPI
+    environment:
+      <<: *app-default-env
+      ServiceUrls__IdentityServer:
+      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Username=postgres;Password=postgres;Database=MangoCouponAPI"
