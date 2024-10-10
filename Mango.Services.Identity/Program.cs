@@ -2,6 +2,7 @@ using Duende.IdentityServer.Services;
 using Mango.Services.Identity;
 using Mango.Services.Identity.DbContexts;
 using Mango.Services.Identity.Initializer;
+using Mango.Services.Identity.Middleware;
 using Mango.Services.Identity.Models;
 using Mango.Services.Identity.Services;
 using Microsoft.AspNetCore.Identity;
@@ -64,6 +65,8 @@ if (!app.Environment.IsDevelopment())
 app.UseIdentityServer();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseMiddleware<RequestLoggingMiddleware>();
 
 app.UseRouting();
 SeedDatabase();

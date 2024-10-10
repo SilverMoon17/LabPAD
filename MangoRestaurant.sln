@@ -34,6 +34,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateway", "Gateway", "{17C0
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mango.GatewaySolution", "Mango.GatewaySolution\Mango.GatewaySolution.csproj", "{17B0628D-A18D-4685-9940-32ABCC440C1D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mango.Shared", "Mango.Shared\Mango.Shared.csproj", "{D91E85DE-6A54-4BAF-894F-0BD011D8379E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -102,5 +104,9 @@ Global
 		{17B0628D-A18D-4685-9940-32ABCC440C1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17B0628D-A18D-4685-9940-32ABCC440C1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17B0628D-A18D-4685-9940-32ABCC440C1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D91E85DE-6A54-4BAF-894F-0BD011D8379E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D91E85DE-6A54-4BAF-894F-0BD011D8379E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D91E85DE-6A54-4BAF-894F-0BD011D8379E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D91E85DE-6A54-4BAF-894F-0BD011D8379E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

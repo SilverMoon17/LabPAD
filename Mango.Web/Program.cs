@@ -2,6 +2,8 @@ using Mango.Web;
 using Mango.Web.Services.IServices;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.IdentityModel.Logging;
+using Serilog;
+using Shared;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +30,7 @@ builder.Services.AddAuthentication(options =>
     .AddOpenIdConnect("oidc", options =>
     {
         options.Authority = builder.Configuration["ServiceUrls:IdentityAPI"];
+        options.MetadataAddress = builder.Configuration["ServiceUrls:MetadataAddress"];;
         options.GetClaimsFromUserInfoEndpoint = true;
         options.ClientId = "mango";
         options.ClientSecret = "secret";
@@ -39,11 +42,17 @@ builder.Services.AddAuthentication(options =>
         options.Scope.Add("mango");
         options.SaveTokens = true;
         options.RequireHttpsMetadata = false;
-        options.BackchannelHttpHandler = new HttpClientHandler
+        options.BackchannelHttpHandler = new JwtBearerBackChannelListener(new HttpClientHandler
         {
             ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
-        };
+        });
     });
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .WriteTo.Console()
+    .WriteTo.File("logs/myapp.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
 
 var app = builder.Build();
 
@@ -69,3 +78,4 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+

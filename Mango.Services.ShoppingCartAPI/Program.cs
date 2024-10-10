@@ -7,6 +7,7 @@ using Mango.Services.ShoppingCartAPI.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Shared;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,12 @@ builder.Services.AddAuthentication("Bearer")
     {
 
         options.Authority = builder.Configuration["ServiceUrls:IdentityServer"];
+        options.MetadataAddress = builder.Configuration["ServiceUrls:MetadataAddress"];
+        options.RequireHttpsMetadata = false;
+        options.BackchannelHttpHandler = new JwtBearerBackChannelListener(new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+        });
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateAudience = false

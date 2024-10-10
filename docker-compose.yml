@@ -13,7 +13,8 @@ services:
       - ./Mango.Web/wwwroot:/app/wwwroot
     environment:
       <<: *app-default-env
-      ServiceUrls__IdentityAPI: https://app.service.identity
+      ServiceUrls__IdentityAPI: https://localhost:44384
+      ServiceUrls__MetadataAddress: http://app.service.identity/.well-known/openid-configuration
       ServiceUrls__ProductAPI: http://app.service.product
       ServiceUrls__CouponAPI: http://app.service.coupon
       ServiceUrls__ShoppingCartAPI: http://app.service.shoppingcart
@@ -29,6 +30,8 @@ services:
     environment:
       <<: *app-default-env
       ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Username=postgres;Password=postgres;Database=MangoOrderAPI"
+      ServiceUrls__IdentityServer: https://localhost:44384
+      ServiceUrls__MetadataAddress: http://app.service.identity/.well-known/openid-configuration
       ConnectionStrings__AzureServiceBus: ${AZURE_SERVICE_BUS_CONNECTION_STRING}
       CheckoutMessageTopic: "checkoutmessagetopic"
       CheckoutSubscription: "mangoOrdersSubscription"
@@ -45,7 +48,8 @@ services:
     build: Mango.Services.AzureBlobService
     environment:
       <<: *app-default-env
-      ServiceUrls__IdentityServer: http://app.service.identity
+      ServiceUrls__IdentityServer: https://localhost:44384
+      ServiceUrls__MetadataAddress: http://app.service.identity/.well-known/openid-configuration
       ConnectionStrings__BlobStorage: ${CONNECTION_STRINGS_BLOB_STORAGE}
       BlobContainerName: ${BLOB_CONTAINER_NAME}
       
@@ -56,6 +60,8 @@ services:
     environment:
       <<: *app-default-env
       ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Username=postgres;Password=postgres;Database=MangoProductAPI"
+      ServiceUrls__IdentityServer: https://localhost:44384
+      ServiceUrls__MetadataAddress: http://app.service.identity/.well-known/openid-configuration
 
   app.service.payment:
     restart: unless-stopped
@@ -65,7 +71,8 @@ services:
       dockerfile: ./Mango.Services.PaymentAPI/Dockerfile
     environment:
       <<: *app-default-env
-      ServiceUrls__IdentityServer: http://app.service.identity
+      ServiceUrls__IdentityServer: https://localhost:44384
+      ServiceUrls__MetadataAddress: http://app.service.identity/.well-known/openid-configuration
       ConnectionStrings__AzureServiceBus: ${AZURE_SERVICE_BUS_CONNECTION_STRING}
       OrderPaymentProcessTopic: "orderpaymentprocesstopic"
       OrderPaymentProcessSubscription: "mangoPayment"
@@ -81,7 +88,8 @@ services:
       dockerfile: ./Mango.Services.ShoppingCartAPI/Dockerfile
     environment:
       <<: *app-default-env
-      ServiceUrls__IdentityServer: http://app.service.identity
+      ServiceUrls__IdentityServer: https://localhost:44384
+      ServiceUrls__MetadataAddress: http://app.service.identity/.well-known/openid-configuration
       ServiceUrls__CouponAPI: http://app.service.coupon
       ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Username=postgres;Password=postgres;Database=MangoShoppingCartAPI"
 
@@ -93,6 +101,8 @@ services:
       - ./Mango.Services.Identity/wwwroot:/app/wwwroot
     environment:
       <<: *app-default-env
+      ServiceUrls__IdentityServer: https://localhost:44384
+      ServiceUrls__MetadataAddress: http://app.service.identity/.well-known/openid-configuration
       ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Username=postgres;Password=postgres;Database=MangoIdentityAPI"
 
   app.service.email:
@@ -103,6 +113,8 @@ services:
       dockerfile: ./Mango.Services.Email/Dockerfile
     environment:
       <<: *app-default-env
+      ServiceUrls__IdentityServer: https://localhost:44384
+      ServiceUrls__MetadataAddress: http://app.service.identity/.well-known/openid-configuration
       ConnectionStrings__AzureServiceBus: ${AZURE_SERVICE_BUS_CONNECTION_STRING}
       OrderUpdatePaymentResultTopic: "orderupdatepaymentresulttopic"
       EmailSubscription: "emailSubscription"
@@ -114,5 +126,6 @@ services:
     build: Mango.Services.CouponAPI
     environment:
       <<: *app-default-env
-      ServiceUrls__IdentityServer:
+      ServiceUrls__IdentityServer: https://localhost:44384
+      ServiceUrls__MetadataAddress: http://app.service.identity/.well-known/openid-configuration
       ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Username=postgres;Password=postgres;Database=MangoCouponAPI"

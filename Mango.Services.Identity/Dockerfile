@@ -1,5 +1,8 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
+
+EXPOSE 443
+
 COPY ./Mango.Services.Identity.csproj .
 RUN dotnet restore "./Mango.Services.Identity.csproj"
 COPY . .

@@ -1,0 +1,15 @@
+﻿<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="MangoRestaurant" type="CompoundRunConfigurationType">
+    <toRun name="Mango.GatewaySolution" type="LaunchSettings" />
+    <toRun name="Mango.Services.AzureBlobService" type="LaunchSettings" />
+    <toRun name="Mango.Services.CouponAPI" type="LaunchSettings" />
+    <toRun name="Mango.Services.Email" type="LaunchSettings" />
+    <toRun name="Mango.Services.Identity: IIS Express" type="LaunchSettings" />
+    <toRun name="Mango.Services.OrderAPI" type="LaunchSettings" />
+    <toRun name="Mango.Services.PaymentAPI" type="LaunchSettings" />
+    <toRun name="Mango.Services.ProductAPI" type="LaunchSettings" />
+    <toRun name="Mango.Services.ShoppingCartAPI" type="LaunchSettings" />
+    <toRun name="Mango.Web" type="LaunchSettings" />
+    <method v="2" />
+  </configuration>
+</component>

@@ -5,6 +5,7 @@ using Mango.Services.CouponAPI.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Shared;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,10 +19,16 @@ builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>
     {
         options.Authority = builder.Configuration["ServiceUrls:IdentityServer"];
+        options.MetadataAddress = builder.Configuration["ServiceUrls:MetadataAddress"];
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateAudience = false
         };
+        options.RequireHttpsMetadata = false;
+        options.BackchannelHttpHandler = new JwtBearerBackChannelListener(new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+        });
     });
 
 builder.Services.AddAuthorization(options =>
