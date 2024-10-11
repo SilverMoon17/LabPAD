@@ -87,7 +87,7 @@ namespace Mango.Services.OrderAPI.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("OrderTime")
+                    b.Property<DateTimeOffset>("OrderTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<double>("OrderTotal")
@@ -99,7 +99,7 @@ namespace Mango.Services.OrderAPI.Migrations
                     b.Property<string>("Phone")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("PickupDateTime")
+                    b.Property<DateTimeOffset>("PickupDateTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("UserId")

@@ -15,10 +15,10 @@ services:
       <<: *app-default-env
       ServiceUrls__IdentityAPI: https://localhost:44384
       ServiceUrls__MetadataAddress: http://app.service.identity/.well-known/openid-configuration
-      ServiceUrls__ProductAPI: http://app.service.product
-      ServiceUrls__CouponAPI: http://app.service.coupon
-      ServiceUrls__ShoppingCartAPI: http://app.service.shoppingcart
-      ServiceUrls__AzureBlobAPI: http://app.service.azureblobservice
+      ServiceUrls__ProductAPI: http://gateway
+      ServiceUrls__CouponAPI: http://gateway
+      ServiceUrls__ShoppingCartAPI: http://gateway
+      ServiceUrls__AzureBlobAPI: http://gateway
       ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Username=postgres;Password=postgres;Database=MangoWEBAPI"
 
   app.service.order:

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Mango.Services.Email.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240928124147_Initial")]
+    [Migration("20241011191359_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,7 +36,7 @@ namespace Mango.Services.Email.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("EmailSent")
+                    b.Property<DateTimeOffset>("EmailSent")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Log")

@@ -21,7 +21,7 @@ public class EmailRepository : IEmailRepository
         EmailLog emailLog = new EmailLog()
         {
             Email = message.Email,
-            EmailSent = DateTime.Now,
+            EmailSent = DateTimeOffset.Now,
             Log = $"Order - {message.OrderId} has been created successfully"
         };
 

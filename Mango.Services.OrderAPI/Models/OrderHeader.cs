@@ -9,8 +9,8 @@ public class OrderHeader
     public double DiscountTotal { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
-    public DateTime PickupDateTime { get; set; }
-    public DateTime OrderTime { get; set; } = DateTime.Now;
+    public DateTimeOffset PickupDateTime { get; set; }
+    public DateTimeOffset OrderTime { get; set; } = DateTimeOffset.Now;
     public string Phone { get; set; }
     public string Email { get; set; }
     public string CardNumber { get; set; }

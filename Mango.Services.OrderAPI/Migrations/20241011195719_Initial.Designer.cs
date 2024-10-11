@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Mango.Services.OrderAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240928124210_Initial")]
+    [Migration("20241011195719_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -89,7 +89,7 @@ namespace Mango.Services.OrderAPI.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("OrderTime")
+                    b.Property<DateTimeOffset>("OrderTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<double>("OrderTotal")
@@ -101,7 +101,7 @@ namespace Mango.Services.OrderAPI.Migrations
                     b.Property<string>("Phone")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("PickupDateTime")
+                    b.Property<DateTimeOffset>("PickupDateTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("UserId")

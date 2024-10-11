@@ -24,6 +24,7 @@ public class OrderRepository : IOrderRepository
         }
         catch (Exception e)
         {
+            throw e;
             return false;
         }
     }

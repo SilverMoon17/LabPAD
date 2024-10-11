@@ -18,7 +18,7 @@ namespace Mango.Services.Email.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Email = table.Column<string>(type: "text", nullable: false),
                     Log = table.Column<string>(type: "text", nullable: false),
-                    EmailSent = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    EmailSent = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {

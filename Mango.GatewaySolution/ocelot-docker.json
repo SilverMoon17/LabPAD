@@ -1,4 +1,4 @@
-{
+﻿{
   "Logging": {
     "LogLevel": {
       "Default": "Information",
@@ -144,19 +144,6 @@
         { "Host": "app.service.shoppingcart", "Port": 80 }
       ],
       "UpstreamPathTemplate": "/api/cart/ApplyCoupon",
-      "UpstreamHttpMethod": [ "POST" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "mango" ]
-      }
-    },
-    {
-      "DownstreamPathTemplate": "/api/cart/RemoveCoupon",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        { "Host": "app.service.shoppingcart", "Port": 80 }
-      ],
-      "UpstreamPathTemplate": "/api/cart/RemoveCoupon",
       "UpstreamHttpMethod": [ "POST" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",

@@ -94,8 +94,7 @@ public class AzureServiceBusConsumerOrder : IAzureServiceBusConsumer
     private async Task OnCheckOutMessageReceived(ProcessMessageEventArgs args)
     {
         var message = args.Message;
-        var body = Encoding.UTF8.GetString(message.Body);
-        CheckoutHeaderDto checkoutHeaderDto = JsonConvert.DeserializeObject<CheckoutHeaderDto>(body);
+        var body = Encoding.UTF8.GetString(message.Body); CheckoutHeaderDto checkoutHeaderDto = JsonConvert.DeserializeObject<CheckoutHeaderDto>(body);
         OrderHeader orderHeader = new()
         {
             UserId = checkoutHeaderDto.UserId,
@@ -108,7 +107,7 @@ public class AzureServiceBusConsumerOrder : IAzureServiceBusConsumer
             DiscountTotal = checkoutHeaderDto.DiscountTotal,
             Email = checkoutHeaderDto.Email,
             ExpiryMonthYear = checkoutHeaderDto.ExpiryMonthYear,
-            OrderTime = DateTime.Now,
+            OrderTime = DateTimeOffset.Now,
             OrderTotal = checkoutHeaderDto.OrderTotal,
             PaymentStatus = false,
             Phone = checkoutHeaderDto.Phone,

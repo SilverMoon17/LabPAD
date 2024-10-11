@@ -34,7 +34,7 @@ namespace Mango.Services.Email.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("EmailSent")
+                    b.Property<DateTimeOffset>("EmailSent")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Log")
