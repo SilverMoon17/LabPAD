@@ -52,7 +52,12 @@ public class CartController : Controller
         try
         {
             var accessToken = await HttpContext.GetTokenAsync("access_token");
+            Serilog.Log.Logger.ForContext("Access Token", "access_token")
+                .ForContext("access_token", accessToken);
             var response = await _cartService.Checkout<ResponseDto>(cartDto.CartHeader, accessToken);
+
+            Serilog.Log.Logger.ForContext("SourceContext", "CartCheckout")
+                .ForContext("@@@ response", response.ToString());
 
             if (!response.IsSuccess)
             {

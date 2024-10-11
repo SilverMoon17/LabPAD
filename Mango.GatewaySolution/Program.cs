@@ -20,7 +20,6 @@ builder.Services.AddAuthentication("Bearer")
         {
             ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
         });
-
     });
 
 builder.Services.AddOcelot();

@@ -29,7 +29,6 @@ builder.Services.AddAuthentication("Bearer")
         {
             ValidateAudience = false
         };
-
     });
 
 builder.Services.AddAuthorization(options =>

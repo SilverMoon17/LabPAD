@@ -46,6 +46,17 @@ builder.Services.AddAuthentication(options =>
         {
             ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
         });
+        options.Events.OnRedirectToIdentityProvider = context =>
+        {
+            context.ProtocolMessage.IssuerAddress = $"{builder.Configuration["ServiceUrls:IdentityAPI"]}/connect/authorize";
+            return Task.CompletedTask;
+        };
+        options.Events.OnRedirectToIdentityProviderForSignOut = context =>
+        {
+            context.ProtocolMessage.IssuerAddress =
+                $"{builder.Configuration["ServiceUrls:IdentityAPI"]}/connect/endsession";
+            return Task.CompletedTask;
+        };
     });
 
 Log.Logger = new LoggerConfiguration()

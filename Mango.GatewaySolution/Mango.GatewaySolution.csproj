@@ -11,16 +11,9 @@
       <PackageReference Include="IdentityModel" Version="6.2.0" />
       <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.32" />
       <PackageReference Include="Ocelot" Version="23.3.3" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\Mango.Shared\Mango.Shared.csproj" />
+      <PackageReference Include="Serilog" Version="4.0.2" />
+      <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+      <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
     </ItemGroup>
 
 </Project>

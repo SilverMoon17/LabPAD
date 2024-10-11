@@ -18,7 +18,7 @@ services:
       ServiceUrls__ProductAPI: http://app.service.product
       ServiceUrls__CouponAPI: http://app.service.coupon
       ServiceUrls__ShoppingCartAPI: http://app.service.shoppingcart
-      ServiceUrls__AzureBlobAPI:
+      ServiceUrls__AzureBlobAPI: http://app.service.azureblobservice
       ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Username=postgres;Password=postgres;Database=MangoWEBAPI"
 
   app.service.order:
@@ -91,6 +91,7 @@ services:
       ServiceUrls__IdentityServer: https://localhost:44384
       ServiceUrls__MetadataAddress: http://app.service.identity/.well-known/openid-configuration
       ServiceUrls__CouponAPI: http://app.service.coupon
+      ConnectionStrings__AzureServiceBus: ${AZURE_SERVICE_BUS_CONNECTION_STRING}
       ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Username=postgres;Password=postgres;Database=MangoShoppingCartAPI"
 
   app.service.identity:
@@ -129,3 +130,12 @@ services:
       ServiceUrls__IdentityServer: https://localhost:44384
       ServiceUrls__MetadataAddress: http://app.service.identity/.well-known/openid-configuration
       ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Username=postgres;Password=postgres;Database=MangoCouponAPI"
+      
+  gateway:
+    restart: unless-stopped
+    image: mango.gateway
+    build:
+      context: .
+      dockerfile: ./Mango.GatewaySolution/Dockerfile
+    environment:
+      <<: *app-default-env

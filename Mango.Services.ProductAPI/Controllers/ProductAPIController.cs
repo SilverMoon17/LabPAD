@@ -53,6 +53,7 @@ namespace Mango.Services.ProductAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<object> Create([FromBody] ProductDto productDto)
         {
             var response = new ResponseDto();

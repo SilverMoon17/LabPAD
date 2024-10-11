@@ -4,6 +4,7 @@ using Mango.Services.ShoppingCartAPI.Models;
 using Mango.Services.ShoppingCartAPI.Models.Dtos;
 using Mango.Services.ShoppingCartAPI.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace Mango.Services.ShoppingCartAPI.Controllers;
 
@@ -131,44 +132,56 @@ public class CartAPIController : ControllerBase
     }
     
     [HttpPost("Checkout")]
-    public async Task<object> Checkout(CheckoutHeaderDto checkoutHeaderDto)
+public async Task<object> Checkout(CheckoutHeaderDto checkoutHeaderDto)
+{
+    var response = new ResponseDto();
+    try
     {
-        var response = new ResponseDto();
-        try
+        Log.Information("Checkout process started for User ID: {UserId} with Coupon Code: {CouponCode}", checkoutHeaderDto.UserId, checkoutHeaderDto.CouponCode);
+
+        CartDto cartDto = await _cartRepository.GetCartByUserIdAsync(checkoutHeaderDto.UserId);
+
+        if (cartDto is null)
         {
-            CartDto cartDto = await _cartRepository.GetCartByUserIdAsync(checkoutHeaderDto.UserId);
-
-            if (cartDto is null)
-            {
-                return BadRequest();
-            }
-
-            if (!string.IsNullOrEmpty(checkoutHeaderDto.CouponCode))
-            {
-                CouponDto couponDto = await _couponRepository.GetCouponAsync(checkoutHeaderDto.CouponCode);
-
-                var currentDiscount = (checkoutHeaderDto.DiscountTotal / (checkoutHeaderDto.OrderTotal + checkoutHeaderDto.DiscountTotal)) * 100;
-                if (Math.Abs(currentDiscount - couponDto.DiscountAmount) > 0.001)
-                {
-                    response.IsSuccess = false;
-                    response.ErrorMessages = new List<string> { "Coupon discount has changed, please confirm!"};
-                    response.DisplayMessage = "Coupon discount has changed, please confirm!";
-                    return response;
-                }
-            }
-
-            checkoutHeaderDto.CartDetails = cartDto.CartDetails;
-            // logic to add message to process order
-            await _messageBus.PublishMessage(checkoutHeaderDto, "checkoutqueue");
-
-            await _cartRepository.ClearCartAsync(checkoutHeaderDto.UserId);
-        }
-        catch (Exception e)
-        {
-            response.IsSuccess = false;
-            response.ErrorMessages = new List<string>() { e.ToString() };
+            Log.Warning("No cart found for User ID: {UserId}", checkoutHeaderDto.UserId);
+            return BadRequest();
         }
 
-        return response;
+        if (!string.IsNullOrEmpty(checkoutHeaderDto.CouponCode))
+        {
+            CouponDto couponDto = await _couponRepository.GetCouponAsync(checkoutHeaderDto.CouponCode);
+
+            var currentDiscount = (checkoutHeaderDto.DiscountTotal / (checkoutHeaderDto.OrderTotal + checkoutHeaderDto.DiscountTotal)) * 100;
+            Log.Information("Coupon {CouponCode} applied with discount {DiscountAmount}%", checkoutHeaderDto.CouponCode, couponDto.DiscountAmount);
+
+            if (Math.Abs(currentDiscount - couponDto.DiscountAmount) > 0.001)
+            {
+                Log.Warning("Coupon discount has changed for User ID: {UserId}. Expected: {ExpectedDiscount}%, Actual: {ActualDiscount}%", checkoutHeaderDto.UserId, couponDto.DiscountAmount, currentDiscount);
+                response.IsSuccess = false;
+                response.ErrorMessages = new List<string> { "Coupon discount has changed, please confirm!" };
+                response.DisplayMessage = "Coupon discount has changed, please confirm!";
+                return response;
+            }
+        }
+
+        checkoutHeaderDto.CartDetails = cartDto.CartDetails;
+        
+        // logic to add message to process order
+        Log.Information("Publishing checkout message for User ID: {UserId} to queue.", checkoutHeaderDto.UserId);
+        await _messageBus.PublishMessage(checkoutHeaderDto, "checkoutqueue");
+
+        Log.Information("Clearing cart for User ID: {UserId}.", checkoutHeaderDto.UserId);
+        await _cartRepository.ClearCartAsync(checkoutHeaderDto.UserId);
     }
+    catch (Exception e)
+    {
+        Log.Error(e, "An error occurred during the checkout process for User ID: {UserId}", checkoutHeaderDto.UserId);
+        response.IsSuccess = false;
+        response.ErrorMessages = new List<string>() { e.ToString() };
+    }
+
+    Log.Information("Checkout process completed for User ID: {UserId}", checkoutHeaderDto.UserId);
+    return response;
+}
+
 }
